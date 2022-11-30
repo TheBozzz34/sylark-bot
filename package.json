@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.7.0"
+    "anti-swear-words-packages-discord": "^2.0.0",
+    "discord.js": "^14.7.0",
+    "swearjar": "^0.2.0"
   },
   "devDependencies": {
     "eslint": "^8.28.0"
