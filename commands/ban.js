@@ -1,6 +1,6 @@
 // ban a discord user
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -20,12 +20,17 @@ module.exports = {
 		const user = interaction.options.getUser('target');
 		const reason = interaction.options.getString('reason');
 		const member = interaction.guild.members.cache.get(user.id);
-		if (member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
+		if (member.permissions.has(PermissionsBitField.Flags.MuteMembers)) {
 			await interaction.reply('You can\'t ban that user!');
 		}
 		else {
-			await interaction.guild.members.ban(user, { reason: reason });
-			await interaction.reply(`Banned ${user.tag} for ${reason}`);
+			try {
+				await interaction.guild.members.ban(user, { reason: reason });
+				await interaction.reply(`Banned ${user.tag} for ${reason}`);
+			}
+			catch (err) {
+				await interaction.reply('Something went wrong!\n ```' + err.stack.split('\n', 1).join('') + '```');
+			}
 		}
 	},
 };

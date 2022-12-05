@@ -1,8 +1,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const swearjar = require('swearjar');
+
+const { DiscordTogether } = require('discord-together');
+
 // Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const { ActivityType, Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { token } = require('./config.json');
 
 // Create a new client instance
@@ -16,11 +19,12 @@ const client = new Client({
 });
 
 
+client.discordTogether = new DiscordTogether(client);
+
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
-	c.user.setPresence({ status: 'online', game: { name: 'With Javascript' } });
 });
 
 

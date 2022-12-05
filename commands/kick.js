@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -19,12 +19,17 @@ module.exports = {
 		const user = interaction.options.getUser('target');
 		const reason = interaction.options.getString('reason');
 		const member = interaction.guild.members.cache.get(user.id);
-		if (member.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) {
+		if (member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
 			await interaction.reply('You can\'t kick that user!');
 		}
 		else {
-			await interaction.guild.members.kick(user, { reason: reason });
-			await interaction.reply(`Kicked ${user.tag} for ${reason}`);
+			try {
+				await interaction.guild.members.kick(user, { reason: reason });
+				await interaction.reply(`Kicked ${user.tag} for ${reason}`);
+			}
+			catch (err) {
+				await interaction.reply('Something went wrong!\n ```' + err.stack.split('\n', 1).join('') + '```');
+			}
 		}
 	},
 };
