@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const swearjar = require('swearjar');
+
+const triggerWords = require('./profanity.json');
 
 const { DiscordTogether } = require('discord-together');
 
@@ -64,10 +65,12 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.on('messageCreate', async message => {
 	if (message.author.bot) return;
-	if (swearjar.profane(message.content)) {
-		message.delete();
-		message.channel.send('Please do not use profanity.');
-	}
+	triggerWords.forEach((word) => {
+		if (message.content.includes(word)) {
+			message.delete();
+		  message.reply('That word has been blacklisted!');
+		}
+	  });
 });
 
 // Log in to Discord with the client's token
